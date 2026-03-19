@@ -18,7 +18,7 @@ WORKDIR /app
 # Copiar el ejecutable del servidor y el archivo .pck
 # Reemplaza "servidor.x86_64" por el nombre de tu archivo exportado
 COPY servidor.x86_64 /app/
-COPY servidor.pck /app/
+#COPY servidor.pck /app/
 
 # Dar permisos de ejecución
 RUN chmod +x /app/servidor.x86_64
