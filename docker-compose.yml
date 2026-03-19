@@ -1,46 +1,31 @@
 version: '3.8'
 
 services:
-  # --- CONTENEDOR DEL SERVIDOR DE GODOT ---
   godot-server:
     build: .
-    container_name: tictactoe-server
+    container_name: godot-server # Este nombre es el que busca Cloudflare
     restart: always
-    # El puerto 8910 se abre internamente para el túnel. 
-    # No es necesario exponerlo al mundo (ports:) si usas Cloudflare.
     expose:
       - "8910"
+    networks:
+      - tictactoe_net
     volumes:
       - godot_data:/root/.local/share/godot/app_userdata/
-    networks:
-      - multiplayer_net
-    # Límites de recursos para evitar que un pico de usuarios tire el VPS
-    deploy:
-      resources:
-        limits:
-          memory: 1G
 
-  # --- CONTENEDOR DEL TÚNEL DE CLOUDFLARE ---
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflare-connector
     restart: always
-    # Conectamos el túnel usando el TOKEN que configuraste en Dokploy
     command: tunnel --no-autoupdate run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
-      - multiplayer_net
+      - tictactoe_net
     depends_on:
       - godot-server
 
-# --- RED INTERNA ---
-# Esto permite que el túnel vea al servidor por su nombre 'godot-server'
 networks:
-  multiplayer_net:
+  tictactoe_net:
     driver: bridge
 
-# --- VOLUMEN PERSISTENTE ---
-# Aquí es donde vive el archivo 'partidas_activas.json'
 volumes:
   godot_data:
