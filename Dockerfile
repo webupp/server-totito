@@ -12,4 +12,5 @@ RUN chmod +x /app/servidor.x86_64
 
 EXPOSE 8910
 
+
 CMD ["./servidor.x86_64", "--headless"]
