@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y ca-certificates curl libvulkan1 libopen
 WORKDIR /app
 
 # REEMPLAZA ESTE LINK por el de tu GitHub Release
-RUN curl -L -o /app/servidor.x86_64 "https://github.com/webupp/server-totito/releases/download/test2/servidor.x86_64"
+RUN curl -L -o /app/servidor.x86_64 "https://github.com/webupp/server-totito/releases/download/test3/servidor.x86_64"
 
 RUN chmod +x /app/servidor.x86_64
 
