@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  godot-server:
+    build: .
+    restart: always
+    ports:
+      - "8910:8910"
+    volumes:
+      - godot_data:/root/.local/share/godot/app_userdata/ # Para que el JSON no se borre al reiniciar
+
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN} # Configura esta variable en Dokploy
+    depends_on:
+      - godot-server
+
+volumes:
+  godot_data:
